@@ -4,3 +4,4 @@ repo = "https://github.com/kmsherbertvt/VTQuantumJuliaRegistry"
 
 [packages]
 b4c031f8-e7c9-4879-896c-063a10ff8103 = { name = "BlockDavidson", path = "B/BlockDavidson" }
+be646426-f34c-4536-b1d4-a45a9633e6db = { name = "PauliOperators", path = "P/PauliOperators" }

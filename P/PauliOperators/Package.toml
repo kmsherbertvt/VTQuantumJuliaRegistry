@@ -1,0 +1,3 @@
+name = "PauliOperators"
+uuid = "be646426-f34c-4536-b1d4-a45a9633e6db"
+repo = "https://github.com/kmsherbertvt/PauliOperators.jl.git"
