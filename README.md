@@ -1,51 +1,30 @@
 # VTQuantumJuliaRegistry
 Hosts a `LocalRegistry` for Julia packages developed by the VT Quantum group.
 
-## When to Use
+## Usage
 
-The point of this registry is to enable a Julia environment (or package) to robustly use a package we've developed in-house.
-For example, if you create an environment and you want to use ADAPT.jl, the most robust approach is to use this registry.
-
-Note that Julia's package manager recently got an interface change that should eventually enable more sophisticated uses of unregistered packages.
-Therefore, I anticipate this registry will not be needed in the future.
-But right now, it is *essential* when you want to use an unregistered package that *itself* uses an unregistered package.
-For example, ADAPT.jl uses PauliOperators.jl.
-
-Strictly speaking, you *could* avoid using the registry even then, by manually adding each of the unregistered dependencies to your environment, even ones you won't use directly.
-For example, trying to add ADAPT.jl will result in an error at first, but you could add PauliOperators.jl first and *then* ADAPT.jl.
-That strategy should be considered a "hack"; using this registry is the preferred solution.
-
-## How to Use
-
-
-First, activate the environment from which you would like to use our VT Quantum packages.
-
-(If you have no idea what that means, scroll down to the `Julia Environments 101` section.)
-
-Next:
-
+If you want to use the most recent version of a Julia package developed in-house (like ADAPT.jl),
+    the easiest strategy is to do the following in a Julia REPL:
 ```
->] registry add "<this registry's github url>"
+> using Pkg
+> pkg"registry add <this repo's github url>"
 ```
+This code adds this registry to your personal Julia installation (i.e. it clones this repo into your `.julia/registries` directory).
+All packages we've added to the registry can now be added to your own local Julia environments *by name* rather than by URL.
 
-That's it.
-Now you can add our VT Quantum packages by name. E.g.:
+Once cloned, Julia automatically updates the registry as needed, so you need never look at it.
+Note that this registry lives in your Julia installation, *not* your Julia environment.
+That means you ***will*** have to do do this each time you want to run your work *on a different computer*,
+    but you will ***not*** have to do anything new each time you start working *on a different project*.
 
-```
->] add ADAPT
-```
+## Adding packages to the registry
 
-Note that, if you weren't using this registry, you'd have to type out the github url instead (which may fail if the package you added has unregistered dependencies).
-
-## How to Modify
-
-Having prepared `LocalRegistry.jl` in your global environment, activate the environment of the package you'd like to register. Then:
-
+To register a new package so that others can add it by name,
+    the easiest strategy is to **activate the package environment** and then do the following in a Julia REPL:
 ```
 > using LocalRegistry
 > register(; registry="<this registry's github url>")
 ```
-
 The `register` function clones the registry's github repo onto your computer, modifies the files to register your active environment, commits the change, and pushes it back onto github.
 In order for this to work, you're going to need to have commit permissions on github.
 It's probably best if we only register "official" versions of packages stored on the group github accounts, and only supervisors or very-trusted postdocs do the registration process.
@@ -55,9 +34,56 @@ It is the remote url that gets registered as the "where to find this package" in
 
 Supposedly there is a way to register a project without having its environment active (e.g. directly registering a repo on github), but I couldn't get it to work.
 
+
+## When to Use
+
+The point of this registry is to enable a Julia environment (or package) to robustly use a package we've developed in-house.
+For example, if you create an environment and you want to use ADAPT.jl, the most robust and error-proof approach is to use this registry.
+
+That said, it'll probably often feel easier to just add packages by url.
+Indeed, you may well wish to do so, if you're trying to use a specific version of the code that we didn't explicitly register
+    (perhaps because you're testing something minor in a specific commit that no-one else is likely to care about once you're done).
+*Even in this case*, adding the registry above is likely to be helpful, if the package you try to add by url has its own unregistered dependencies.
+
+Here is a hypothetical scenario, which should give a good idea of what this local registry is good for.
+
+> I want to run a specific version of ADAPT, for a specific experiment.
+> So, I set up a local Julia environment for just this experiment.
+> Now I need to add the ADAPT.jl package to this environment.
+> 
+> **Without the registry:**
+> I need to add the package by URL: `pkg"add https://github.com/kmsherbertvt/ADAPT.jl"`.
+> Except, I'm trying to use a specific version, so I'd better include the commit hash: `pkg"add https://github.com/kmsherbertvt/ADAPT.jl#v8v981v"`.
+> But now I get an error! ADAPT depends on PauliOperators, and Julia doesn't know where to find it!
+> So now I have to add PauliOperators manually: `pkg"add https://github.com/nmayhallvt/PauliOperators.jl"`.
+> Now I try to add the ADAPT url again.
+> It works.
+> 
+> > NOTE: It is likely that an experiment involving ADAPT will require access to PauliOperators directly,
+> >     so this doesn't seem all that big of a deal.
+> > However, at time of writing, PauliOperators has its *own* dependency, on BlockDavidson,
+> >     which *also* needs to be added manually.
+> > And this is a big deal because BlockDavidson has *absolutely nothing* to do with ADAPT,
+> >     to the point where *most* people running ADAPT code shouldn't even need to be aware that a thing called "BlockDavidson" exists.
+> > But, if they want to run ADAPT, they have to manually add that package to their environment!]
+>
+> 
+> **With the registry installed:**
+> If I were just using the the latest version of ADAPT, I could simply `pkg"add ADAPT"`.
+> But I'm after a specific version, which isn't registered.
+> So I have to add by url after all: `pkg"add https://github.com/kmsherbertvt/ADAPT.jl#v8v981v"`.
+> It works.
+
+Note that Julia's package manager recently got an interface change that should by all rights enable adding by url to just work.
+But it doesn't yet, and I'm tired of waiting!
+Nevertheless, I have hope this registry will not be needed in the future.
+
 ## Relevant Documentation
 - https://pkgdocs.julialang.org/v1/registries/
 - https://github.com/GunnarFarneback/LocalRegistry.jl
+
+
+
 
 ## Julia Environments 101
 
