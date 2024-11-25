@@ -112,7 +112,7 @@ It also helps a lot when trying to work from multiple computers,
 ```
 Be careful, though - the REPL will let you use packages in the active environment ***OR*** the global environment,
     so it's possible your scripts were using something that had been added to your global environment, which didn't get instantiated.
-Try to avoid that, by only adding to the global environment certain development utilities like `BenchmarkTools` or `Revise`.
+Try to avoid that, by only adding to the global environment certain development utilities like `BenchmarkTools` or `LocalRegistry`.
 
 Packages are themselves associated with their own environment,
     meaning every package comes with its own `Project.toml`.
