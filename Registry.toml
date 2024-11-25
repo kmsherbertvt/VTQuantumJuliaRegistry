@@ -3,3 +3,4 @@ uuid = "6fec464c-8e4c-44e9-9f58-fdbfd4beb5e5"
 repo = "https://github.com/kmsherbertvt/VTQuantumJuliaRegistry"
 
 [packages]
+b4c031f8-e7c9-4879-896c-063a10ff8103 = { name = "BlockDavidson", path = "B/BlockDavidson" }
