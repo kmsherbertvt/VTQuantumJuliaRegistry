@@ -3,6 +3,7 @@ uuid = "6fec464c-8e4c-44e9-9f58-fdbfd4beb5e5"
 repo = "https://github.com/kmsherbertvt/VTQuantumJuliaRegistry"
 
 [packages]
+a38abb17-106d-41ea-aadf-52de082dc5e0 = { name = "LocalCustoms", path = "L/LocalCustoms" }
 b2d0ec06-4a30-46b9-b20f-1283d2f7986d = { name = "TemporaryArrays", path = "T/TemporaryArrays" }
 b4c031f8-e7c9-4879-896c-063a10ff8103 = { name = "BlockDavidson", path = "B/BlockDavidson" }
 be646426-f34c-4536-b1d4-a45a9633e6db = { name = "PauliOperators", path = "P/PauliOperators" }
